@@ -1,10 +1,10 @@
 'use strict'
-
+const path = require("path");
 import { app, protocol, BrowserWindow } from 'electron'
+import "./node/index";  //引入需要使用的node模块
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
     { scheme: 'app', privileges: { secure: true, standard: true, stream: true } }
@@ -15,9 +15,12 @@ async function createWindow () {
     const win = new BrowserWindow({
         width: 800,
         height: 620,
+        resizable: false,
+        maximizable: false,
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-            contextIsolation: false,
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
             enableRemoteModule: true,
             webSecurity: false // 取消跨域限制
         }
@@ -36,6 +39,7 @@ async function createWindow () {
         win.webContents.openDevTools()
     }
 }
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -66,7 +70,9 @@ app.on('ready', async () => {
         // }
     }
     createWindow()
-})
+});
+
+
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

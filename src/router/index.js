@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '../views/main.vue';
 
 Vue.use(VueRouter)
 
@@ -8,16 +8,36 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    redirect:'/dbconfig',
+    children: [
+      {
+        path: 'dbconfig',
+        name: 'dbconfig',
+        component: () => import("@/views/homeview/dbconfig/"),
+      },
+      {
+        path: 'dsconfig',
+        name: 'dsconfig',
+        component: () => import("@/views/homeview/dsconfig/"),
+      },
+      {
+        path: 'storage',
+        name: 'storage',
+        component: () => import("@/views/homeview/storage/"),
+      },
+      {
+        path: 'publish',
+        name: 'publish',
+        component: () => import("@/views/homeview/publish/"),
+      },
+      {
+        path: 'setting',
+        name: 'setting',
+        component: () => import("@/views/setting/"),
+      }
+    ],
   },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
 ]
 
 const router = new VueRouter({
