@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         //
         //     });
         // }
-        ipcRenderer.once(channel, (_event, arg) => {
+        ipcRenderer.once(channel, (_event,...arg) => {
             setTimeout(() => {
                 func(_event, arg);
             }, 0);

@@ -4,10 +4,11 @@
     <div class="content">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="名称" prop="name">
-          <el-input size="small"  type="password" v-model="ruleForm.name" placeholder="请输入名称"  autocomplete="off"></el-input>
+          <el-input size="small"  v-model="ruleForm.name" placeholder="请输入名称"  autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="位置" prop="position">
           <el-input size="small"  v-model="ruleForm.position" placeholder="请选择文档文件夹位置"  autocomplete="off"></el-input>
+          <el-button size="small" class="choose" @click="change">选择</el-button>
         </el-form-item>
         <el-form-item>
           <el-button size="small"  type="primary" @click="submitForm('ruleForm')">添加</el-button>
@@ -20,6 +21,7 @@
 
 <script>
 import Header from "@/components/Header/index.vue";
+import * as events from "events";
 export default {
   name: "index",
   components:{
@@ -39,6 +41,14 @@ export default {
     };
   },
   methods: {
+    change() {
+      console.log(11);
+      window.ipcRenderer.send('electronApi');
+      window.ipcRenderer.receive("fromMain", (event, [path,tree]) => {
+        this.ruleForm.position = path[0];
+        console.log(tree, 1234);
+      });
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -63,6 +73,16 @@ export default {
     .el-form-item{
       width: 90%;
       margin-bottom: 10px;
+      .choose {
+        //float: right;
+        margin-left: 20px;
+        background: #383838;
+        color: white;
+        border: none;
+      }
+      .el-input {
+        width: 77%;
+      }
       .el-select{
         width: 100px;
         .el-input__inner {
@@ -75,6 +95,7 @@ export default {
       .el-input__inner{
         background: #383838;
         border: none;
+        color: #C0C4CC;
       }
     }
   }
