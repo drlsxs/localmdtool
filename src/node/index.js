@@ -1,4 +1,5 @@
-import {ipcMain,dialog} from 'electron';
+import {ipcMain,dialog,shell} from 'electron';
+const fs = require("fs");
 import {testDB} from "@/node/mysql";
 import {getDirectoryTree} from "@/node/dictory";
 
@@ -13,15 +14,26 @@ ipcMain.on("electronApi", (event, args) => {
     dialog.showOpenDialog({
         properties: ['openDirectory']
     }).then(result => {
-        // console.log(result.filePaths);
         let dirPath = result.filePaths[0];
         const tree = getDirectoryTree(dirPath);
         event.reply('fromMain', result.filePaths, tree);
-        // console.log(tree);
     }).catch(err => {
         console.log(err);
     });
 });
+
+ipcMain.on("fileopen", (event, filepath) => {
+
+    fs.readFile(filepath, {encoding: 'utf8'}, (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            event.reply("filecont", data);
+        }
+    });
+});
+
+
 
 
 

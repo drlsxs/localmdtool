@@ -105,7 +105,8 @@ if (isDevelopment) {
 
 ## 截图
 ![](screenshot/img.png)
-![](screenshot/img_1.png)
+![](screenshot/img_1.png) 
+![](screenshot/img_2.png)
 
 
 
