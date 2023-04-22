@@ -6,6 +6,7 @@
     "serve": "vue-cli-service electron:serve",
     "build": "vue-cli-service electron:build"
   },
+  "main": "background.js",
   "author": {
     "name": "yangshilin",
     "email": "290624894@qq.com"

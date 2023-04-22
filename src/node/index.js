@@ -12,6 +12,18 @@ ipcMain.on("toMain", (event, args) => {
     });
 });
 
+ipcMain.on("electronApi", (event, args) => {
+    dialog.showOpenDialog({
+        properties: ['openDirectory']
+    }).then(result => {
+        let dirPath = result.filePaths[0];
+        const tree = getDirectoryTree(dirPath);
+        event.reply('fromMain', result.filePaths, tree);
+    }).catch(err => {
+        console.log(err);
+    });
+});
+
 ipcMain.on("fileopen", (event, filepath) => {
     fs.readFile(filepath, {encoding: 'utf8'}, (err, data) => {
         if (err) {
@@ -23,14 +35,19 @@ ipcMain.on("fileopen", (event, filepath) => {
 });
 
 ipcMain.on("fileWrite", (event,[filePath,content]) => {
-    fs.writeFile(filePath, content, "utf8", function (err) {
+    // 创建目录
+    fs.mkdir(path.dirname(filePath), { recursive: true }, (err) => {
         if (err) throw err;
-        console.log('File is created successfully.');
+        fs.writeFile(filePath, content, "utf8", function (err) {
+            if (err) throw err;
+            console.log('File is created successfully.');
+        });
     });
+
 });
 
 ipcMain.on("pathTree", (event, args) => {
-    fs.readFile("./src/config/dataSourceConfig.json", {encoding: 'utf8'}, (err, data) => {
+    fs.readFile("./config/dataSourceConfig.json", {encoding: 'utf8'}, (err, data) => {
         if (err) {
             console.log(err);
         } else {
@@ -63,7 +80,7 @@ ipcMain.on("fileSave", (event, {label:mdFile,path:dirPath}) => {
     console.log(`Last Modified Time: ${mtime}`);
     console.log(`Content: ${content}`);
     //读取数据库信息
-    fs.readFile("./src/config/databaseConfig.json", {encoding: 'utf8'}, (err, data) => {
+    fs.readFile("./config/databaseConfig.json", {encoding: 'utf8'}, (err, data) => {
         if (err) {
             console.log(err);
         } else {
@@ -125,7 +142,7 @@ ipcMain.on("fileSave", (event, {label:mdFile,path:dirPath}) => {
 
 //批量入库
 ipcMain.on("fileSaves", (event, args) => {
-    fs.readFile("./src/config/dataSourceConfig.json", {encoding: 'utf8'}, (err, data) => {
+    fs.readFile("./config/dataSourceConfig.json", {encoding: 'utf8'}, (err, data) => {
         if (err) {
             console.log(err);
         } else {

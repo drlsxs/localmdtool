@@ -32,7 +32,7 @@
           <el-input size="small"  v-model="ruleForm.username" placeholder="请输入用户名"  autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input size="small"  v-model="ruleForm.password" placeholder="请输入密码"  autocomplete="off"></el-input>
+          <el-input size="small"  type="password"  v-model="ruleForm.password" placeholder="请输入密码"  autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button size="small"  type="primary" @click="submitForm('ruleForm')">添加</el-button>
@@ -85,7 +85,7 @@ export default {
           window.ipcRenderer.receive('fromMain', (event, args) => {
             if (args == 'Database connected success') {
               alert('数据库连接成功');
-              window.ipcRenderer.send("fileWrite",["./src/config/databaseConfig.json", JSON.stringify(this.ruleForm)]);
+              window.ipcRenderer.send("fileWrite",["./config/databaseConfig.json", JSON.stringify(this.ruleForm)]);
             } else {
               alert('数据库连接失败');
             }
@@ -102,7 +102,7 @@ export default {
   },
   mounted() {
     //获取项目中数据库的配置信息
-    window.ipcRenderer.send("fileopen", "./src/config/databaseConfig.json");
+    window.ipcRenderer.send("fileopen", "./config/databaseConfig.json");
     window.ipcRenderer.receive("filecont", (event, [json]) => {
       this.ruleForm = JSON.parse(json);
     });

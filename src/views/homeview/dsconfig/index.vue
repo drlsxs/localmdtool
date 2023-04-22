@@ -46,13 +46,16 @@ export default {
 
     change() {
       window.ipcRenderer.send('electronApi');
+      window.ipcRenderer.receive("fromMain", (event, [path, tree]) => {
+        this.ruleForm.position = path[0];
+      });
     },
 
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let json = JSON.stringify(this.ruleForm);
-          window.ipcRenderer.send("fileWrite", ["./src/config/dataSourceConfig.json", json]);
+          window.ipcRenderer.send("fileWrite", ["./config/dataSourceConfig.json", json]);
         } else {
           console.log('error submit!!');
           return false;
@@ -65,7 +68,7 @@ export default {
   },
   mounted() {
     //获取项目中数据资源的配置信息
-    window.ipcRenderer.send("fileopen", "./src/config/dataSourceConfig.json");
+    window.ipcRenderer.send("fileopen", "./config/dataSourceConfig.json");
     window.ipcRenderer.receive("filecont", (event, [json]) => {
       this.ruleForm = JSON.parse(json);
     });

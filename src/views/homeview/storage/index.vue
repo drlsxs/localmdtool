@@ -16,7 +16,7 @@
         </el-aside>
         <el-main>
           <div class="markdown-body js_md_content" ref="cont"></div>
-          <el-button size="small" class="ruku" type="primary"  @click="saveToDB">入库</el-button>
+          <el-button size="small" class="ruku" type="primary"  @click="saveToDB" v-if="Object.entries(currNode).length">入库</el-button>
         </el-main>
       </el-container>
     </div>
@@ -70,6 +70,7 @@ export default {
       let paths = path.slice(0, index);
       let elementTree = convertToElementTreeData(tree, paths);
       elementTree = filterElementTreeData(elementTree);
+      console.log(path, tree);
       this.$store.commit('setdictoryTree', elementTree.children);
     });
   }
@@ -92,9 +93,9 @@ export default {
       padding: 0;
       position: relative;
       .ruku{
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
+        position: fixed;
+        bottom: 39px;
+        right: 47px;
       }
       /* 设置滚动条的宽度和背景颜色 */
       &::-webkit-scrollbar {

@@ -10,6 +10,8 @@ protocol.registerSchemesAsPrivileged([
     { scheme: 'app', privileges: { secure: true, standard: true, stream: true } }
 ])
 
+console.log(__dirname, 123);
+
 async function createWindow () {
     // Create the browser window.
     const win = new BrowserWindow({
@@ -17,6 +19,7 @@ async function createWindow () {
         height: 620,
         resizable: false,
         maximizable: false,
+        icon: path.join(__dirname,'../public/aqtoj-ecvhz-001.ico'),
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             preload: path.join(__dirname, 'preload.js'),
@@ -36,7 +39,7 @@ async function createWindow () {
         createProtocol('app')
         // Load the index.html when not in development
         win.loadURL('app://./index.html')
-        win.webContents.openDevTools()
+        // win.webContents.openDevTools()
     }
 }
 
