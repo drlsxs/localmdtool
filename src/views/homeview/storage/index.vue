@@ -16,6 +16,7 @@
         </el-aside>
         <el-main>
           <div class="markdown-body js_md_content" ref="cont"></div>
+          <el-button size="small" class="ruku" type="primary"  @click="saveToDB">入库</el-button>
         </el-main>
       </el-container>
     </div>
@@ -25,6 +26,7 @@
 <script>
 import Header from "@/components/Header/index.vue";
 import {mapState} from "vuex";
+import {convertToElementTreeData, filterElementTreeData} from "@/utils";
 const marked = require("marked");
 export default {
   name: "index",
@@ -36,14 +38,20 @@ export default {
   },
   data() {
     return {
-      activeName: 'first'
+      activeName: 'first',
+      currNode: {}, //当前节点
     };
   },
   methods: {
+    saveToDB() {
+      // console.log(this.currNode);
+      window.ipcRenderer.send("fileSave", this.currNode);
+    },
     handleClick(tab, event) {
       console.log(this.dictoryTree)
     },
     handleNodeClick(node) {
+      this.currNode = node;
       const filePath = node.path;
       if (filePath !== undefined) {
         window.ipcRenderer.send("fileopen", filePath);
@@ -53,6 +61,17 @@ export default {
         });
       }
     }
+  },
+  mounted() {
+    window.ipcRenderer.send("pathTree");
+    // window.ipcRenderer.send("fileSave");
+    window.ipcRenderer.receive("treeInfo", (event, [path, tree]) => {
+      let index = path.lastIndexOf("\\");
+      let paths = path.slice(0, index);
+      let elementTree = convertToElementTreeData(tree, paths);
+      elementTree = filterElementTreeData(elementTree);
+      this.$store.commit('setdictoryTree', elementTree.children);
+    });
   }
 }
 </script>
@@ -71,6 +90,12 @@ export default {
     }
     .el-main {
       padding: 0;
+      position: relative;
+      .ruku{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+      }
       /* 设置滚动条的宽度和背景颜色 */
       &::-webkit-scrollbar {
         width: 5px;
@@ -97,6 +122,11 @@ export default {
     }
   }
   ::v-deep{
+    .markdown-body pre{
+      &::-webkit-scrollbar{
+        display: none;
+      }
+    }
     .markdown-body pre code, .markdown-body pre tt {
       display: inline-block;
       &::-webkit-scrollbar{

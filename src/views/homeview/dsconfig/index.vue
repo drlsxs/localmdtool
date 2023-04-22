@@ -43,23 +43,16 @@ export default {
     };
   },
   methods: {
+
     change() {
-      console.log(11);
       window.ipcRenderer.send('electronApi');
-      window.ipcRenderer.receive("fromMain", (event, [path, tree]) => {
-        this.ruleForm.position = path[0];
-        let index = path[0].lastIndexOf("\\");
-        let paths = path[0].slice(0, index);
-        let elementTree = convertToElementTreeData(tree, paths);
-        elementTree = filterElementTreeData(elementTree);
-        this.$store.commit('setdictoryTree', elementTree.children);
-      });
     },
 
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          let json = JSON.stringify(this.ruleForm);
+          window.ipcRenderer.send("fileWrite", ["./src/config/dataSourceConfig.json", json]);
         } else {
           console.log('error submit!!');
           return false;
@@ -69,6 +62,13 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  mounted() {
+    //获取项目中数据资源的配置信息
+    window.ipcRenderer.send("fileopen", "./src/config/dataSourceConfig.json");
+    window.ipcRenderer.receive("filecont", (event, [json]) => {
+      this.ruleForm = JSON.parse(json);
+    });
   }
 }
 </script>

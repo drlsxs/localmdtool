@@ -14,10 +14,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="name">
-          <el-input size="small"  type="password" v-model="ruleForm.name" placeholder="请输入名称"  autocomplete="off"></el-input>
+          <el-input size="small" v-model="ruleForm.name" placeholder="请输入名称"  autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="数据库名称" prop="dbName">
           <el-input size="small"  v-model="ruleForm.dbName" placeholder="请输入数据库名称"  autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="入库表名" prop="tableName">
+          <el-input size="small"  v-model="ruleForm.tableName" placeholder="请输入入库表名"  autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="主机" prop="host">
           <el-input size="small"  v-model="ruleForm.host" placeholder="请输入主机ip"  autocomplete="off"></el-input>
@@ -42,6 +45,7 @@
 
 <script>
 import Header from "@/components/Header/index.vue";
+import * as events from "events";
 export default {
   name: "index",
   components:{
@@ -63,6 +67,7 @@ export default {
         password: "",
         dbType: 'mysql',
         dbName: "",
+        tableName: "",
       },
       rules: {
         name: [
@@ -80,7 +85,7 @@ export default {
           window.ipcRenderer.receive('fromMain', (event, args) => {
             if (args == 'Database connected success') {
               alert('数据库连接成功');
-              this.ruleForm = {};
+              window.ipcRenderer.send("fileWrite",["./src/config/databaseConfig.json", JSON.stringify(this.ruleForm)]);
             } else {
               alert('数据库连接失败');
             }
@@ -94,6 +99,13 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  mounted() {
+    //获取项目中数据库的配置信息
+    window.ipcRenderer.send("fileopen", "./src/config/databaseConfig.json");
+    window.ipcRenderer.receive("filecont", (event, [json]) => {
+      this.ruleForm = JSON.parse(json);
+    });
   }
 }
 </script>

@@ -1,6 +1,5 @@
 const mysql = require("mysql");
     function testDB(config,cb) {
-        console.log(config, 1243);
         let {host,username,password,dbName,port} = config;
     let result = '';
     const connection = mysql.createConnection({
