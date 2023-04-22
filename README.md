@@ -104,13 +104,13 @@ if (isDevelopment) {
 ```
 
 ## 截图
-数据库配置
++ 数据库配置
 ![](screenshot/img.png)
-文档路径选择
++ 文档路径选择
 ![](screenshot/img_1.png)
-数据入库
++ 数据入库
 ![](screenshot/img_2.png)
-入库展示
++ 入库展示
 ![](screenshot/img_3.png)
 
 
