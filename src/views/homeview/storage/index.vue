@@ -56,6 +56,9 @@ export default {
       if (filePath !== undefined) {
         window.ipcRenderer.send("fileopen", filePath);
         window.ipcRenderer.receive("filecont", (event, [content]) => {
+          const regex = /#[a-zA-Z0-9]+ /g;  // 匹配以 # 开头，空格结尾的字符串，其中只包含数字和字母
+          const tags = content.match(regex); //找到匹配的
+          console.log(tags, 123);
           const html = marked.parse(content);
           this.$refs.cont.innerHTML = html;
         });

@@ -86,6 +86,7 @@ export default {
             if (args == 'Database connected success') {
               alert('数据库连接成功');
               window.ipcRenderer.send("fileWrite",["./config/databaseConfig.json", JSON.stringify(this.ruleForm)]);
+              window.ipcRenderer.send("appMounted");
             } else {
               alert('数据库连接失败');
             }

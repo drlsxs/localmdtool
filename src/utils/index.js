@@ -25,8 +25,31 @@ function filterElementTreeData(data) {
     return data;
 }
 
+//日期工具
+function DateUtils() {
+    /**
+     * 返回字符串 "yyyy-MM-dd HH:mm:ss"的日期字符串
+     * @param date
+     * @returns {string}
+     * @constructor
+     */
+    function Date2Str(date) {
+        const now = new Date(date);
+        return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+    }
+
+    return{
+        Date2Str,
+    }
+
+}
+
+
+
+
 
 export {
     convertToElementTreeData,
-    filterElementTreeData
+    filterElementTreeData,
+    DateUtils
 }

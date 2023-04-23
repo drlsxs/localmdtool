@@ -112,7 +112,8 @@ if (isDevelopment) {
 ![](screenshot/img_2.png)
 + 入库展示
 ![](screenshot/img_3.png)
-
++ 数据库ER图
+![](screenshot/img_4.png)
 
 
 
