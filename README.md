@@ -114,6 +114,6 @@ if (isDevelopment) {
 ![](screenshot/img_3.png)
 + 数据库ER图
 ![](screenshot/img_4.png)
-
-
++ 文章批量发布
+  ![](screenshot/img_5.png)
 
