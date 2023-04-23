@@ -274,6 +274,19 @@ ipcMain.on("getPages", (event, {filename, pageNum, pageSize}) => {
 });
 
 
+ipcMain.on("publish", (event, {pageIds, plat_id}) => {
+    for (const pageId of pageIds) {
+        const sql = `INSERT INTO page_platform (page_id, plat_id) VALUES (${mysql.escape(pageId)}, ${mysql.escape(plat_id)})`;
+        connection.query(sql, (error, results) => {
+            if (error) {
+                console.error(error);
+            } else {
+                console.log(`Page ${pageId}已经发布到平台 ${plat_id}.`);
+            }
+        });
+    }
+});
+
 
 
 
